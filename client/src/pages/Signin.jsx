@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from '../redux/user/userSlice';
 
 const Signin = () => {
   const [formData, setformData] = useState({});
-  const [isError, setIsError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isError, setIsError] = useState(null);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.user);
 
   const changeHandler = (e) => {
     setformData({
@@ -19,7 +27,7 @@ const Signin = () => {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -30,18 +38,16 @@ const Signin = () => {
 
       const data = await res.json();
       console.log(data);
+      console.log(error);
 
       if (data.success === false) {
-        setIsLoading(false);
-        setIsError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setIsLoading(false);
-      setIsError(null);
+      dispatch(signInSuccess(data));
       navigate('/');
     } catch (error) {
-      setIsError(error);
-      setIsLoading(false);
+      dispatch(signInFailure(error));
     }
   };
 
@@ -67,11 +73,11 @@ const Signin = () => {
         />
 
         <button
-          disabled={isLoading}
+          disabled={loading}
           type="submit"
           className="bg-blue-950 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-70"
         >
-          {isLoading ? 'Loading...' : 'Sign In'}
+          {loading ? 'Loading...' : 'Sign In'}
         </button>
       </form>
 
@@ -82,7 +88,7 @@ const Signin = () => {
           Sign up
         </Link>
       </p>
-      {isError && <p className="text-red-500 mt-5">{isError}</p>}
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };
