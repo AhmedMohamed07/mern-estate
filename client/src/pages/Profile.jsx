@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import {
   getDownloadURL,
@@ -9,6 +9,9 @@ import {
 } from 'firebase/storage';
 import { app } from '../firebase';
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -22,6 +25,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -86,7 +91,26 @@ const Profile = () => {
       dispatch(updateUserFailure(error.message));
     }
   };
-  console.log(error);
+
+  const deleteHandler = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(error.message));
+      }
+
+      dispatch(deleteUserSuccess());
+      navigate('/sign-in');
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      console.log(error);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-center text-3xl my-7 font-semibold">Profile</h1>
@@ -176,6 +200,7 @@ const Profile = () => {
         <button
           type="button"
           className="bg-red-700 p-3 text-white rounded-lg  uppercase hover:opacity-90 disabled:opacity-70"
+          onClick={deleteHandler}
         >
           Delete Account
         </button>
