@@ -12,6 +12,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserSuccess,
+  signOutUserstart,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -66,7 +69,6 @@ const Profile = () => {
       [e.target.id]: e.target.value,
     });
   };
-  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,7 +109,23 @@ const Profile = () => {
       navigate('/sign-in');
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
-      console.log(error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserstart());
+      const res = await fetch('api/auth/signout');
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(signOutUserFailure(error.message));
+      }
+
+      dispatch(signOutUserSuccess());
+      navigate('/sign-in');
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
     }
   };
 
@@ -207,6 +225,7 @@ const Profile = () => {
         <button
           type="button"
           className="bg-red-700 p-3 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-70"
+          onClick={handleSignOut}
         >
           Sign Out
         </button>
