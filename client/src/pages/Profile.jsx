@@ -196,7 +196,7 @@ const Profile = () => {
           {loading ? 'Loading' : 'Update'}
         </button>
 
-        <Link to={'create-listing'}>
+        <Link to={'/create-listing'}>
           <button
             type="submit"
             className="bg-green-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-70 w-full"
