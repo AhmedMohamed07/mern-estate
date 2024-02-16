@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, json, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import {
   getDownloadURL,
@@ -28,7 +28,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
-
+  const [showListingError, setShowListingError] = useState(false);
+  const [showListingUser, setShowListingUser] = useState([]);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -129,6 +130,23 @@ const Profile = () => {
     }
   };
 
+  const handleShowListing = async () => {
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        setShowListingError(data.message);
+      }
+
+      setShowListingUser(data);
+      console.log(data);
+    } catch (error) {
+      setShowListingError(error.message);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-center text-3xl my-7 font-semibold">Profile</h1>
@@ -210,11 +228,8 @@ const Profile = () => {
       <p className="text-green-700 my-5">
         {updateSuccess && 'User is updated successfully!'}
       </p>
-      <button className="bg-emerald-800 w-full p-3  text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-70">
-        Show Listings
-      </button>
 
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between my-5">
         <button
           type="button"
           className="bg-red-700 p-3 text-white rounded-lg  uppercase hover:opacity-90 disabled:opacity-70"
@@ -230,6 +245,52 @@ const Profile = () => {
           Sign Out
         </button>
       </div>
+
+      <button
+        onClick={handleShowListing}
+        className="bg-emerald-800 w-full p-3  text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-70"
+      >
+        Show Listings
+      </button>
+
+      {showListingUser.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-2xl text-center font-bold my-7">Your listings</h1>
+          {showListingUser.map((list) => (
+            <div
+              key={list._id}
+              className="border rounded-lg  flex justify-between p-3"
+            >
+              <div className="flex gap-2 items-center">
+                <Link to={`/listing/${list._id}`}>
+                  <img
+                    src={list.imageUrls[0]}
+                    className="w-16 h-16 hover:shadow"
+                    alt="image"
+                  />
+                </Link>
+
+                <Link
+                  className="text-slate-700 font-semibold  hover:underline truncate flex-1 hover:shadow"
+                  to={`/listing/${list._id}`}
+                >
+                  {' '}
+                  <p>{list.name}</p>
+                </Link>
+              </div>
+
+              <div className="flex flex-col item-center">
+                <button className="text-red-700 uppercase hover:shadow">
+                  Delete
+                </button>
+                <button className="text-green-700 uppercase hover:shadow">
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
