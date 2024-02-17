@@ -29,7 +29,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingError, setShowListingError] = useState(false);
-  const [showListingUser, setShowListingUser] = useState([]);
+  const [userListings, setUserListings] = useState([]);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -140,10 +140,29 @@ const Profile = () => {
         setShowListingError(data.message);
       }
 
-      setShowListingUser(data);
+      setUserListings(data);
       console.log(data);
     } catch (error) {
       setShowListingError(error.message);
+    }
+  };
+
+  const handleDeleteListing = async (listID) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listID}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) => prev.filter((list) => list._id !== listID));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -252,11 +271,12 @@ const Profile = () => {
       >
         Show Listings
       </button>
+      <p> {showListingError ? 'Error showing listings' : ''}</p>
 
-      {showListingUser.length > 0 && (
+      {userListings.length > 0 && (
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl text-center font-bold my-7">Your listings</h1>
-          {showListingUser.map((list) => (
+          {userListings.map((list) => (
             <div
               key={list._id}
               className="border rounded-lg  flex justify-between p-3"
@@ -280,7 +300,10 @@ const Profile = () => {
               </div>
 
               <div className="flex flex-col item-center">
-                <button className="text-red-700 uppercase hover:shadow">
+                <button
+                  onClick={() => handleDeleteListing(list._id)}
+                  className="text-red-700 uppercase hover:shadow"
+                >
                   Delete
                 </button>
                 <button className="text-green-700 uppercase hover:shadow">
