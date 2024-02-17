@@ -238,7 +238,7 @@ const Profile = () => {
             type="submit"
             className="bg-green-700 text-white rounded-lg p-3 uppercase hover:opacity-90 disabled:opacity-70 w-full"
           >
-            {'create listing'}
+            Create listing
           </button>
         </Link>
       </form>
@@ -285,7 +285,7 @@ const Profile = () => {
                 <Link to={`/listing/${list._id}`}>
                   <img
                     src={list.imageUrls[0]}
-                    className="w-16 h-16 hover:shadow"
+                    className="w-16 h-16 hover:shadow object-cover"
                     alt="image"
                   />
                 </Link>
@@ -306,9 +306,11 @@ const Profile = () => {
                 >
                   Delete
                 </button>
-                <button className="text-green-700 uppercase hover:shadow">
-                  Edit
-                </button>
+                <Link to={`/update-listing/${list._id}`}>
+                  <button className="text-green-700 uppercase hover:shadow">
+                    Edit
+                  </button>{' '}
+                </Link>
               </div>
             </div>
           ))}

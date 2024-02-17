@@ -153,7 +153,6 @@ export default function CreateListing() {
           userRef: currentUser._id,
         }),
       });
-      console.log(currentUser._id);
 
       const data = await res.json();
       console.log(data);
