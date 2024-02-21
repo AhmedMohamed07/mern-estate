@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+
 import {
   FaBath,
   FaBed,
@@ -9,12 +11,21 @@ import {
   FaShare,
   FaSquareParking,
 } from 'react-icons/fa6';
+import 'swiper/css/bundle';
+import { Navigation } from 'swiper/modules';
+import { useSelector } from 'react-redux';
+import Contact from '../components/Contact';
 
 const Listing = () => {
+  SwiperCore.use([Navigation]);
+
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
+
+  const { currentUser } = useSelector((state) => state.user);
 
   const { id } = useParams();
   useEffect(() => {
@@ -84,7 +95,7 @@ const Listing = () => {
             </p>
           )}
 
-          <div className="flex flex-col gap-4 p-3 my-8">
+          <div className="flex flex-col gap-4 p-3 my-8 max-w-4xl mx-auto">
             <h1 className="font-semibold text-2xl">
               {listing.name} - $ {listing.regularPrice} / month
             </h1>
@@ -135,6 +146,18 @@ const Listing = () => {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
+            {currentUser && currentUser._id !== listing.userRef && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                className="bg-blue-950 rounded-lg p-3  uppercase text-white
+              hover:opacity-80"
+              >
+                Contact
+              </button>
+            )}
+
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

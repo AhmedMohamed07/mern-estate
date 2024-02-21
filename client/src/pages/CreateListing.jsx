@@ -230,7 +230,6 @@ export default function CreateListing() {
                 name="rent"
                 id="rent"
                 className="w-5 h-5 text-blue-600 rounded"
-                required
                 onChange={handleChange}
                 checked={formData.type === 'rent'}
               />
