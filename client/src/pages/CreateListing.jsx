@@ -358,7 +358,7 @@ export default function CreateListing() {
             </span>
           </p>
 
-          <div className="flex  gap-4 ">
+          <div className="flex gap-4">
             <input
               onChange={(e) => setFiles(e.target.files)}
               type="file"
@@ -366,7 +366,7 @@ export default function CreateListing() {
               id="image"
               accept="image/*"
               multiple
-              className="p-3 border flex-1"
+              className="p-3 border w-full"
             />
             <button
               type="button"
