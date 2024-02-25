@@ -251,14 +251,14 @@ const Profile = () => {
       <div className="flex justify-between my-5">
         <button
           type="button"
-          className="bg-red-700 p-3 text-white rounded-lg  uppercase hover:opacity-90 disabled:opacity-70"
+          className="text-red-600 p-3 bg-transparent border border-red-900 rounded-lg  uppercase hover:shadow-lg disabled:opacity-70"
           onClick={deleteHandler}
         >
           Delete Account
         </button>
         <button
           type="button"
-          className="bg-red-700 p-3 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-70"
+          className="text-red-600 p-3 bg-transparent border border-red-900 rounded-lg  uppercase hover:shadow-lg disabled:opacity-70"
           onClick={handleSignOut}
         >
           Sign Out
@@ -267,7 +267,7 @@ const Profile = () => {
 
       <button
         onClick={handleShowListing}
-        className="bg-emerald-800 w-full p-3  text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-70"
+        className="text-emerald-600 p-3 bg-transparent border border-emerald-900 rounded-lg  uppercase hover:shadow-lg disabled:opacity-70 self-center block m-auto"
       >
         Show Listings
       </button>

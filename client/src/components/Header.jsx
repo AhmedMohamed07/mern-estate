@@ -26,23 +26,23 @@ export default function Header() {
 
   return (
     <header className="bg-slate-200 shadow-md">
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
+      <div className="flex justify-between items-center max-w-6xl mx-auto gap-2 p-3">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
-            <span className="text-sky-700">Ahmed</span>
-            <span className="text-blue-950">Estate</span>
+            <span className="text-blue-950">Ahmed</span>
+            <span className="text-sky-700">Estate</span>
           </h1>
         </Link>
         <form
           onSubmit={submitHandler}
-          className="bg-slate-100 p-3 flex items-center rounded-lg"
+          className="bg-slate-100 p-3 flex items-center justify-between flex-1 sm:flex-none rounded-lg"
         >
           <input
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
             type="text"
             placeholder="Search..."
-            className="bg-transparent w-24 sm:w-64 text-xs md:text-sm focus:outline-none"
+            className="bg-transparent w-24 sm:w-56 text-xs md:text-sm focus:outline-none"
           />
 
           <button>
