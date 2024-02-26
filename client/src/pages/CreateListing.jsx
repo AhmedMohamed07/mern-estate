@@ -100,7 +100,6 @@ export default function CreateListing() {
         ...formData,
         type: e.target.id,
       });
-      console.log(e.target.id);
     }
 
     if (
@@ -125,7 +124,6 @@ export default function CreateListing() {
       });
     }
   };
-  console.log(formData);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -155,7 +153,6 @@ export default function CreateListing() {
       });
 
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         setIsError(data.message);
         setLoading(false);

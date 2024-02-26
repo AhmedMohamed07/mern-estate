@@ -132,18 +132,20 @@ const Profile = () => {
 
   const handleShowListing = async () => {
     try {
+      setShowListingError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
 
       const data = await res.json();
 
-      if (data.success === false) {
-        setShowListingError(data.message);
+      if (data.success === false || data.length === 0) {
+        setShowListingError(true);
+      } else {
+        setShowListingError(false);
       }
 
       setUserListings(data);
-      console.log(data);
     } catch (error) {
-      setShowListingError(error.message);
+      setShowListingError(true);
     }
   };
 
@@ -154,7 +156,6 @@ const Profile = () => {
       });
 
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         console.log(data.message);
         return;
@@ -271,7 +272,10 @@ const Profile = () => {
       >
         Show Listings
       </button>
-      <p> {showListingError ? 'Error showing listings' : ''}</p>
+      <p className="text-red-600 text-center my-5">
+        {' '}
+        {showListingError ? "'You didn't create listings yet!" : ''}
+      </p>
 
       {userListings.length > 0 && (
         <div className="flex flex-col gap-4">

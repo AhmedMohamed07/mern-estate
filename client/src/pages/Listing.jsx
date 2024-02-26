@@ -46,8 +46,6 @@ const Listing = () => {
         setListing(data);
         setError(false);
         setLoading(false);
-
-        console.log(data);
       } catch (error) {
         setError(true);
         setLoading(false);

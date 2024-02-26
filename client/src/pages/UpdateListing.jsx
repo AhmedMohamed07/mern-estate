@@ -115,7 +115,6 @@ export default function UpdateListing() {
         ...formData,
         type: e.target.id,
       });
-      console.log(e.target.id);
     }
 
     if (
@@ -140,7 +139,6 @@ export default function UpdateListing() {
       });
     }
   };
-  console.log(formData);
 
   const submitHandler = async (e) => {
     e.preventDefault();
